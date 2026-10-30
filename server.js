@@ -3,6 +3,7 @@ import { pool } from "./db.js";
 import { housesRouter } from "./routers/houses.router.js";
 import { teachersRouter } from "./routers/teachers.router.js";
 import { studentsRouter } from "./routers/students.router.js";
+import { coursesRouter } from "./routers/courses.router.js";
 
 const app = express();
 const port = 3000;
@@ -31,6 +32,9 @@ app.use("/teachers", teachersRouter);
 
 // Students
 app.use("/students", studentsRouter);
+
+// Courses
+app.use("/courses", coursesRouter);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
