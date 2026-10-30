@@ -15,3 +15,25 @@ export const getSingleTeacher = async (id) => {
 
   return singular;
 };
+
+// Create new teacher in database ^^
+
+export const createTeacher = async (req, res) => {
+  const { name, house_id, courses_id } = req.body;
+
+  const newTeacher = await pool.query(
+    "INSERT INTO teachers (name, house_id, courses_id) VALUES ($1, $2, $3) RETURNING *",
+    [name, house_id, courses_id],
+  );
+
+  return newTeacher.rows[0];
+};
+
+// Delete a teacher from the database :3c
+export const deleteTeacher = async (id) => {
+  const deletedTeacher = await pool.query(
+    "DELETE FROM teachers WHERE id = $1 RETURNING *",
+    [id],
+  );
+  return deletedTeacher.rows[0];
+};

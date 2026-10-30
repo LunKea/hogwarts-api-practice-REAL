@@ -6,3 +6,7 @@ export const teachersRouter = express.Router();
 teachersRouter.get("/", teachersController.getAllTeachers);
 
 teachersRouter.get("/:id", teachersController.getSingleTeachers);
+
+teachersRouter.post("/", teachersController.createTeacher);
+
+teachersRouter.delete("/:id", teachersController.deleteTeacher);
