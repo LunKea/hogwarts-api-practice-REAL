@@ -19,7 +19,6 @@ export const getSingleHouses = async (req, res) => {
     if (singleHouse.rowCount === 0) return res.sendStatus(404);
     res.status(200).json(singleHouse.rows[0]);
   } catch (err) {
-    console.log("fejl her");
     res.status(500).json({ error: "database error :/", code: err.code });
   }
 };

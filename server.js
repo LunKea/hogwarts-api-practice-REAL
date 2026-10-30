@@ -1,6 +1,7 @@
 import express from "express";
 import { pool } from "./db.js";
 import { housesRouter } from "./routers/houses.router.js";
+import { teachersRouter } from "./routers/teachers.router.js";
 
 const app = express();
 const port = 3000;
@@ -24,51 +25,8 @@ app.use(express.json()); // parse JSON bodies
 // Refere til houses routeren når URL'en bruger /houses
 app.use("/houses", housesRouter);
 
-// get specific house
-// app.get("/houses/:id", async (req, res) => {
-//   try {
-//     const one = await pool.query("SELECT * FROM houses WHERE id = $1", [
-//       req.params.id,
-//     ]);
-//     if (one.rowCount === 0) return res.sendStatus(404);
-//     res.status(200).json(one.rows[0]);
-//   } catch (err) {
-//     console.log(err);
-//     res.status(500).json({ error: "database error" });
-//   }
-// });
-
-// ---- Teachers ---- //
-
-// get all teachers
-app.get("/teachers", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT * FROM teachers");
-
-    console.table(result.rows);
-    res.json(result.rows);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "database error", code: err.code });
-  }
-});
-
-// get specific teacher
-app.get("/teachers/:id", async (req, res) => {
-  try {
-    const one = await pool.query("SELECT * FROM teachers WHERE id = $1", [
-      req.params.id,
-    ]);
-    if (one.rowCount === 0) return res.sendStatus(404);
-    res.status(200).json(one.rows[0]);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "database error" });
-  }
-});
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+//Teachers
+app.use("/teachers", teachersRouter);
 
 // ---- students ---- //
 
@@ -97,4 +55,8 @@ app.get("/students/:id", async (req, res) => {
     console.log(err);
     res.status(500).json({ error: "database error" });
   }
+});
+
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
 });
