@@ -1,5 +1,7 @@
-const express = require("express");
-const pool = require("./db");
+import express from "express";
+import { pool } from "./db.js";
+import { housesRouter } from "./routers/houses.router.js";
+
 const app = express();
 const port = 3000;
 
@@ -7,30 +9,34 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // parse JSON bodies
 
 // get all houses
-app.get("/houses", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT * FROM houses");
+// app.get("/houses", async (req, res) => {
+//   try {
+//     const result = await pool.query("SELECT * FROM houses");
 
-    console.table(result.rows);
-    res.json(result.rows);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "database error", code: err.code });
-  }
-});
+//     console.table(result.rows);
+//     res.json(result.rows);
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ error: "database error", code: err.code });
+//   }
+// });
+
+// Refere til houses routeren når URL'en bruger /houses
+app.use("/houses", housesRouter);
 
 // get specific house
-app.get("/houses/:id", async (req, res) => {
-  try {
-    const one = await pool.query("SELECT * FROM houses WHERE id = $1", [req.params.id]);
-    if (one.rowCount === 0) return res.sendStatus(404);
-    res.status(200).json(one.rows[0]);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "database error" });
-  }
-});
-
+// app.get("/houses/:id", async (req, res) => {
+//   try {
+//     const one = await pool.query("SELECT * FROM houses WHERE id = $1", [
+//       req.params.id,
+//     ]);
+//     if (one.rowCount === 0) return res.sendStatus(404);
+//     res.status(200).json(one.rows[0]);
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ error: "database error" });
+//   }
+// });
 
 // ---- Teachers ---- //
 
@@ -50,7 +56,9 @@ app.get("/teachers", async (req, res) => {
 // get specific teacher
 app.get("/teachers/:id", async (req, res) => {
   try {
-    const one = await pool.query("SELECT * FROM teachers WHERE id = $1", [req.params.id]);
+    const one = await pool.query("SELECT * FROM teachers WHERE id = $1", [
+      req.params.id,
+    ]);
     if (one.rowCount === 0) return res.sendStatus(404);
     res.status(200).json(one.rows[0]);
   } catch (err) {
@@ -61,7 +69,6 @@ app.get("/teachers/:id", async (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
-
 
 // ---- students ---- //
 
@@ -81,14 +88,13 @@ app.get("/students", async (req, res) => {
 // get specific student
 app.get("/students/:id", async (req, res) => {
   try {
-    const one = await pool.query("SELECT * FROM students WHERE id = $1", [req.params.id]);
+    const one = await pool.query("SELECT * FROM students WHERE id = $1", [
+      req.params.id,
+    ]);
     if (one.rowCount === 0) return res.sendStatus(404);
     res.status(200).json(one.rows[0]);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "database error" });
   }
-});
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
 });
