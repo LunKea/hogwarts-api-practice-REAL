@@ -10,3 +10,5 @@ teachersRouter.get("/:id", teachersController.getSingleTeachers);
 teachersRouter.post("/", teachersController.createTeacher);
 
 teachersRouter.delete("/:id", teachersController.deleteTeacher);
+
+teachersRouter.put("/:id", teachersController.updateTeacher);

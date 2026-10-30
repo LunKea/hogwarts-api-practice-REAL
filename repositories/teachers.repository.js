@@ -37,3 +37,14 @@ export const deleteTeacher = async (id) => {
   );
   return deletedTeacher.rows[0];
 };
+
+// Updates a teacher
+export const updateTeacher = async (id, teacher) => {
+  const { name, house_id, courses_id } = teacher;
+
+  const updatedTeacher = await pool.query(
+    "UPDATE teachers SET name = $1, house_id = $2, courses_id = $3 WHERE id = $4 RETURNING *",
+    [name, house_id, courses_id, id],
+  );
+  return updatedTeacher;
+};

@@ -39,8 +39,21 @@ export const deleteTeacher = async (req, res) => {
 
   try {
     await teachersRepository.deleteTeacher(id);
-    return res.status(200).send("teacher deleted");
+    return res.status(200).send("Sayonara (Goodbye in japanese) teacher");
   } catch (err) {
+    res.status(500).json({ error: "database error :/", code: err.code });
+  }
+};
+export const updateTeacher = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedTeacher = await teachersRepository.updateTeacher(id, req.body);
+
+    if (updatedTeacher.rowCount === 0) return res.sendStatus(404);
+    res.status(200).json(updatedTeacher.rows[0]);
+  } catch (err) {
+    console.log(err);
     res.status(500).json({ error: "database error :/", code: err.code });
   }
 };
