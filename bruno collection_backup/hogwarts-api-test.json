@@ -1,0 +1,42 @@
+{
+  "version": "1",
+  "name": "hogwarts-api-test",
+  "items": [],
+  "environments": [],
+  "runtimeVariables": {},
+  "brunoConfig": {
+    "opencollection": "1.0.0",
+    "name": "hogwarts-api-test",
+    "type": "collection",
+    "ignore": [
+      "node_modules",
+      ".git"
+    ],
+    "proxy": {
+      "inherit": true,
+      "config": {
+        "protocol": "http",
+        "hostname": "",
+        "port": "",
+        "auth": {
+          "username": "",
+          "password": ""
+        },
+        "bypassProxy": ""
+      }
+    }
+  },
+  "securityConfig": {
+    "jsSandboxMode": "safe"
+  },
+  "settingsSelectedTab": "overview",
+  "folderLevelSettingsSelectedTab": {},
+  "allTags": [],
+  "format": "yml",
+  "importedAt": 1793567734955,
+  "lastAction": null,
+  "globalEnvironmentVariables": {},
+  "globalEnvSecrets": [],
+  "exportedAt": "2026-11-01T21:15:40.703Z",
+  "exportedUsing": "Bruno VS Code Extension"
+}
