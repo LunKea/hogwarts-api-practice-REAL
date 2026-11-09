@@ -16,8 +16,10 @@ export const getAllCourses = async (req, res) => {
 export const getSingleCourse = async (req, res) => {
   try {
     const singleCourse = await coursesRepository.getSingleCourse(req.params.id);
-    if (singleCourse.rowCount === 0) return res.sendStatus(404);
-    res.status(200).json(singleCourse.rows[0]);
+    if (!singleCourse) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+    res.status(200).json(singleCourse);
   } catch (err) {
     res.status(500).json({ error: "database error :/", code: err.code });
   }
@@ -49,8 +51,10 @@ export const updateCourse = async (req, res) => {
   try {
     const updatedCourse = await coursesRepository.updateCourse(id, req.body);
 
-    if (updatedCourse.rowCount === 0) return res.sendStatus(404);
-    res.status(200).json(updatedCourse.rows[0]);
+    if (!updatedCourse) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+    res.status(200).json(updatedCourse);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "database error :/", code: err.code });

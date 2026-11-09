@@ -13,7 +13,7 @@ export const getSingleStudent = async (id) => {
     id,
   ]);
 
-  return singular;
+  return singular.rows[0];
 };
 
 // Create new student in database ^^

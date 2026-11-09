@@ -18,8 +18,10 @@ export const getSingleTeachers = async (req, res) => {
     const singleTeacher = await teachersRepository.getSingleTeacher(
       req.params.id,
     );
-    if (singleTeacher.rowCount === 0) return res.sendStatus(404);
-    res.status(200).json(singleTeacher.rows[0]);
+    if (!singleTeacher) {
+      return res.status(404).json({ error: "Teacher not found" });
+    }
+    res.status(200).json(singleTeacher);
   } catch (err) {
     res.status(404).json({ error: "database error :/", code: err.code });
   }
@@ -50,8 +52,10 @@ export const updateTeacher = async (req, res) => {
   try {
     const updatedTeacher = await teachersRepository.updateTeacher(id, req.body);
 
-    if (updatedTeacher.rowCount === 0) return res.sendStatus(404);
-    res.status(200).json(updatedTeacher.rows[0]);
+    if (!updatedTeacher) {
+      return res.status(404).json({ error: "Teacher not found" });
+    }
+    res.status(200).json(updatedTeacher);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "database error :/", code: err.code });

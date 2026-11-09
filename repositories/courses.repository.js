@@ -13,19 +13,18 @@ export const getSingleCourse = async (id) => {
     id,
   ]);
 
-  return singular;
+  return singular.rows[0];
 };
 
 // Create new course in database ^^
 
 export const createCourse = async (req, res) => {
-  const { name, year, house_id } = req.body;
+  const { name, teacher_id } = req.body;
 
   const newCourse = await pool.query(
-    "INSERT INTO courses (name, year, house_id) VALUES ($1, $2, $3) RETURNING *",
-    [name, year, house_id],
+    "INSERT INTO courses (name, teacher_id) VALUES ($1, $2) RETURNING *",
+    [name, teacher_id],
   );
-
   return newCourse.rows[0];
 };
 
@@ -40,11 +39,11 @@ export const deleteCourse = async (id) => {
 
 // Updates a course
 export const updateCourse = async (id, course) => {
-  const { name, year, house_id } = course;
+  const { name, teacher_id } = course;
 
   const updatedCourse = await pool.query(
-    "UPDATE courses SET name = $1, year = $2, house_id = $3 WHERE id = $4 RETURNING *",
-    [name, year, house_id, id],
+    "UPDATE courses SET name = $1, teacher_id = $2 WHERE id = $3 RETURNING *",
+    [name, teacher_id, id],
   );
   return updatedCourse;
 };

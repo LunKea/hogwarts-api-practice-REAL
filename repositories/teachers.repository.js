@@ -13,7 +13,7 @@ export const getSingleTeacher = async (id) => {
     id,
   ]);
 
-  return singular;
+  return singular.rows[0];
 };
 
 // Create new teacher in database ^^
