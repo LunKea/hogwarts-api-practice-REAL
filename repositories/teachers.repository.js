@@ -2,7 +2,10 @@ import { pool } from "../db.js";
 
 // Function for all teachers :3
 export const getAllTeachers = async () => {
-  const list = await pool.query("SELECT * FROM teachers");
+  const list = await pool.query(`select teachers.id, teachers.name, houses.name
+FROM teachers
+    RIGHT JOIN houses
+    ON teachers.house_id = houses.id`);
 
   return list.rows;
 };
