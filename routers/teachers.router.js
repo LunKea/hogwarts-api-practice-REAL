@@ -5,7 +5,7 @@ export const teachersRouter = express.Router();
 
 teachersRouter.get("/", teachersController.getAllTeachers);
 
-teachersRouter.get("/:id", teachersController.getSingleTeachers);
+teachersRouter.get("/:id", teachersController.getSingleTeacher);
 
 teachersRouter.post("/", teachersController.createTeacher);
 

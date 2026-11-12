@@ -4,7 +4,7 @@ import { pool } from "../db.js";
 export const getAllTeachers = async () => {
   const list = await pool.query(`select teachers.id, teachers.name, houses.name
 FROM teachers
-    RIGHT JOIN houses
+    JOIN houses
     ON teachers.house_id = houses.id`);
 
   return list.rows;

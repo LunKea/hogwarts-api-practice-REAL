@@ -1,5 +1,5 @@
 import * as repository from "../repositories/teachers.repository.js";
-import HTTPError from "../errorhandler/HTTPError.js";
+import HTTPError from "../errorhandlers/HTTPErrors.js";
 
 // Get all teachers
 export async function getAllTeachers(req, res) {

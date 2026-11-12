@@ -5,4 +5,4 @@ export const housesRouter = express.Router();
 
 housesRouter.get("/", housesController.getAllHouses);
 
-housesRouter.get("/:id", housesController.getSingleHouses);
+housesRouter.get("/:id", housesController.getSingleHouse);

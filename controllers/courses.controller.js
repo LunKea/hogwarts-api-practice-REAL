@@ -1,5 +1,5 @@
 import * as repository from "../repositories/courses.repository.js";
-import HTTPError from "../errorhandler/HTTPError.js";
+import HTTPError from "../errorhandlers/HTTPErrors.js";
 
 // Get all courses
 export async function getAllCourses(req, res) {

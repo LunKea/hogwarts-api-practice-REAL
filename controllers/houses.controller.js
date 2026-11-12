@@ -1,5 +1,5 @@
 import * as repository from "../repositories/houses.repository.js";
-import HTTPError from "../errorhandler/HTTPError.js";
+import HTTPError from "../errorhandlers/HTTPErrors.js";
 
 // get all houses
 export async function getAllHouses(req, res) {
