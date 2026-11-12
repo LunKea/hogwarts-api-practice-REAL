@@ -1,26 +1,19 @@
-import * as housesRepository from "../repositories/houses.repository.js";
+import * as repository from "../repositories/houses.repository.js";
+import HTTPError from "../errorhandler/HTTPError.js";
 
 // get all houses
-export const getAllHouses = async (req, res) => {
-  try {
-    const allHouses = await housesRepository.getAllHouses();
+export async function getAllHouses(req, res) {
+  const all = await repository.getAllHouses();
+  return res.status(200).json(all);
+}
 
-    console.table(allHouses);
-    res.json(allHouses);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "database error", code: err.code });
-  }
-};
+// get single house
+export async function getSingleHouse(req, res) {
+  const id = req.params.id;
+  const single = await repository.getSingleHouse(id);
 
-export const getSingleHouses = async (req, res) => {
-  try {
-    const singleHouse = await housesRepository.getSingleHouse(req.params.id);
-    if (!singleHouse) {
-      return res.status(404).json({ error: "House not found" });
-    }
-    res.status(200).json(singleHouse);
-  } catch (err) {
-    res.status(500).json({ error: "database error :/", code: err.code });
+  if (single.rowCount === 0) {
+    throw new HTTPError(404, "House not found");
   }
-};
+  return res.status(200).json(single.rows[0]);
+}

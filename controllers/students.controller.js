@@ -1,65 +1,71 @@
-import * as studentsRepository from "../repositories/students.repository.js";
+import * as repository from "../repositories/students.repository.js";
+import HTTPError from "../errorhandler/HTTPError.js";
 
-// get all students
-export const getAllStudents = async (req, res) => {
-  try {
-    const allStudents = await studentsRepository.getAllStudents();
+// Get all students
+export async function getAllStudents(req, res) {
+  const all = await repository.getAllStudents();
+  return res.status(200).json(all);
+}
 
-    console.table(allStudents);
-    res.json(allStudents);
-  } catch (err) {
-    console.log(err);
-    res.status(404).json({ error: "database error", code: err.code });
+// Get a single student
+export async function getSingleStudent(req, res) {
+  const id = req.params.id;
+  const single = await repository.getSingleStudent(id);
+
+  if (single.rowCount === 0) {
+    throw new HTTPError(404, "Student not found");
   }
-};
+  return res.status(200).json(single.rows[0]);
+}
 
-export const getSingleStudents = async (req, res) => {
-  try {
-    const singleStudent = await studentsRepository.getSingleStudent(
-      req.params.id,
+// Create a new student
+export async function createStudent(req, res) {
+  const { name, house_id, semester } = req.body;
+
+  if (!name || !house_id || !semester) {
+    throw new HTTPError(
+      400,
+      "Student name, house_id, and semester are required",
     );
-    if (!singleStudent) {
-      return res.status(404).json({ error: "Student not found" });
-    }
-    res.status(200).json(singleStudent);
-  } catch (err) {
-    res.status(404).json({ error: "database error :/", code: err.code });
   }
-};
 
-export const createStudent = async (req, res) => {
-  try {
-    const newStudent = await studentsRepository.createStudent(req, res);
-    res.status(202).json(newStudent);
-  } catch (err) {
-    res.status(500).json({ error: "database error :/", code: err.code });
-  }
-};
+  const createdResult = await repository.createStudent(req, res);
+  return res.status(201).json(createdResult);
+}
 
-export const deleteStudent = async (req, res) => {
+// Update a student
+export async function updateStudent(req, res) {
   const { id } = req.params;
+  const { name, house_id, semester } = req.body;
 
-  try {
-    await studentsRepository.deleteStudent(id);
-    return res
-      .status(200)
-      .send("Sayonara (Goodbye in japanese) student-kun-chan");
-  } catch (err) {
-    res.status(500).json({ error: "database error :/", code: err.code });
+  if (!name || !house_id || !semester) {
+    throw new HTTPError(
+      400,
+      "Student name, house_id, and semester are required",
+    );
   }
-};
-export const updateStudent = async (req, res) => {
+
+  const updateResult = await repository.updateStudent(
+    id,
+    name,
+    house_id,
+    semester,
+  );
+
+  if (updateResult.rowCount === 0) {
+    throw new HTTPError(404, "Student not found");
+  }
+
+  return res.status(200).json(updateResult.rows[0]);
+}
+
+// Delete a student
+export async function deleteStudent(req, res) {
   const { id } = req.params;
+  const deleteResult = await repository.deleteStudent(id);
 
-  try {
-    const updatedStudent = await studentsRepository.updateStudent(id, req.body);
-
-   if (!updatedStudent) {
-      return res.status(404).json({ error: "Student not found" });
-    }
-    res.status(200).json(updatedStudent);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "database error :/", code: err.code });
+  if (deleteResult.rowCount === 0) {
+    throw new HTTPError(404, "Student not found");
   }
-};
+  return res.status(200).json({ message: "Student deleted successfully" });
+}

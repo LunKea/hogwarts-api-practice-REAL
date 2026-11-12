@@ -1,63 +1,57 @@
-import * as teachersRepository from "../repositories/teachers.repository.js";
+import * as repository from "../repositories/teachers.repository.js";
+import HTTPError from "../errorhandler/HTTPError.js";
 
-// get all teachers
-export const getAllTeachers = async (req, res) => {
-  try {
-    const allTeachers = await teachersRepository.getAllTeachers();
+// Get all teachers
+export async function getAllTeachers(req, res) {
+  const all = await repository.getAllTeachers();
+  return res.status(200).json(all);
+}
 
-    console.table(allTeachers);
-    res.json(allTeachers);
-  } catch (err) {
-    console.log(err);
-    res.status(404).json({ error: "database error", code: err.code });
+// Get a single teacher
+export async function getSingleTeacher(req, res) {
+  const id = req.params.id;
+  const single = await repository.getSingleTeacher(id);
+
+  if (single.rowCount === 0) {
+    throw new HTTPError(404, "Teacher not found");
   }
-};
+  return res.status(200).json(single.rows[0]);
+}
 
-export const getSingleTeachers = async (req, res) => {
-  try {
-    const singleTeacher = await teachersRepository.getSingleTeacher(
-      req.params.id,
-    );
-    if (!singleTeacher) {
-      return res.status(404).json({ error: "Teacher not found" });
-    }
-    res.status(200).json(singleTeacher);
-  } catch (err) {
-    res.status(404).json({ error: "database error :/", code: err.code });
+// Create a new teacher
+export async function createTeacher(req, res) {
+  const { name, house_id } = req.body;
+
+  if (!name || !house_id) {
+    throw new HTTPError(400, "Teacher name and house_id are required");
   }
-};
 
-export const createTeacher = async (req, res) => {
-  try {
-    const newTeacher = await teachersRepository.createTeacher(req, res);
-    res.status(202).json(newTeacher);
-  } catch (err) {
-    res.status(500).json({ error: "database error :/", code: err.code });
+  const createdResult = await repository.createTeacher(req, res);
+  return res.status(201).json(createdResult);
+}
+
+// Update a teacher
+export async function updateTeacher(req, res) {
+  const id = req.params.id;
+  const { name, house_id } = req.body;
+  if (!name || !house_id) {
+    throw new HTTPError(400, "Teacher name and house_id are required");
   }
-};
 
-export const deleteTeacher = async (req, res) => {
+  const updateResult = await repository.updateTeacher(id, name, house_id);
+
+  if (updateResult.rowCount === 0) {
+    throw new HTTPError(404, "Teacher not found");
+  }
+  return res.status(200).json(updateResult.rows[0]);
+}
+
+// Delete a teacher
+export async function deleteTeacher(req, res) {
   const { id } = req.params;
-
-  try {
-    await teachersRepository.deleteTeacher(id);
-    return res.status(200).send("Sayonara (Goodbye in japanese) teacher");
-  } catch (err) {
-    res.status(500).json({ error: "database error :/", code: err.code });
+  const deleteResult = await repository.deleteTeacher(id);
+  if (deleteResult.rowCount === 0) {
+    throw new HTTPError(404, "Teacher not found");
   }
-};
-export const updateTeacher = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const updatedTeacher = await teachersRepository.updateTeacher(id, req.body);
-
-    if (!updatedTeacher) {
-      return res.status(404).json({ error: "Teacher not found" });
-    }
-    res.status(200).json(updatedTeacher);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "database error :/", code: err.code });
-  }
-};
+  return res.status(200).json({ message: "Teacher deleted successfully" });
+}
