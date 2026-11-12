@@ -1,11 +1,12 @@
 import { pool } from "../db.js";
+import HTTPError from "../errorhandlers/HTTPErrors.js";
 
 // Function for all teachers :3
 export const getAllTeachers = async () => {
-  const list = await pool.query(`select teachers.id, teachers.name, houses.name
-FROM teachers
-    JOIN houses
-    ON teachers.house_id = houses.id`);
+  const list = await pool.query(`SELECT teachers.id, teachers.name, houses.name
+                                  FROM teachers
+                                  JOIN houses
+                                  ON teachers.house_id = houses.id`);
 
   return list.rows;
 };
@@ -49,5 +50,6 @@ export const updateTeacher = async (id, teacher) => {
     "UPDATE teachers SET name = $1, house_id = $2, courses_id = $3 WHERE id = $4 RETURNING *",
     [name, house_id, courses_id, id],
   );
+
   return updatedTeacher;
 };

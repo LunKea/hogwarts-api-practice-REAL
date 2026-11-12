@@ -33,12 +33,17 @@ export async function createTeacher(req, res) {
 // Update a teacher
 export async function updateTeacher(req, res) {
   const id = req.params.id;
-  const { name, house_id } = req.body;
+  const { name, house_id, courses_id } = req.body;
+
   if (!name || !house_id) {
     throw new HTTPError(400, "Teacher name and house_id are required");
   }
 
-  const updateResult = await repository.updateTeacher(id, name, house_id);
+  const updateResult = await repository.updateTeacher(id, {
+    name,
+    house_id,
+    courses_id,
+  });
 
   if (updateResult.rowCount === 0) {
     throw new HTTPError(404, "Teacher not found");
