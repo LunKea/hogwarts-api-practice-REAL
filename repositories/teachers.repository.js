@@ -1,10 +1,12 @@
-// Function for a singular teacher :3c
-export const getSingleTeacher = async (id) => {
-  const singular = await pool.query(`SELECT * FROM teachers WHERE id = $1`, [
-    id,
-  ]);
+// Function for all teachers :3
+export const getAllTeachers = async () => {
+  const list =
+    await pool.query(`SELECT teachers.id, teachers.name, houses.name AS house
+                                  FROM teachers
+                                  JOIN houses
+                                  ON teachers.house_id = houses.id`);
 
-  return singular.rows[0];
+  return list.rows;
 };
 
 // Create new teacher in database ^^
@@ -32,16 +34,16 @@ export const deleteTeacher = async (id) => {
 };
 
 // Updates a teacher - OLD
-export const updateTeacher = async (id, teacher) => {
-  const { name, house_id, courses_id } = teacher;
+// export const updateTeacher = async (id, teacher) => {
+//   const { name, house_id, courses_id } = teacher;
 
-  const updatedTeacher = await pool.query(
-    `UPDATE teachers
-     SET name = $1, house_id = $2, courses_id = $3
-     WHERE id = $4
-     RETURNING *`,
-    [name, house_id, courses_id, id],
-  );
+//   const updatedTeacher = await pool.query(
+//     `UPDATE teachers
+//      SET name = $1, house_id = $2, courses_id = $3
+//      WHERE id = $4
+//      RETURNING *`,
+//     [name, house_id, courses_id, id],
+//   );
 
-  return updatedTeacher.rows[0];
-};
+//   return updatedTeacher.rows[0];
+// };
