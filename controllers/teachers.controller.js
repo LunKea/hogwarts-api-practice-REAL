@@ -20,6 +20,7 @@ export async function getSingleTeacher(req, res) {
 
 // Create a new teacher
 export async function createTeacher(req, res) {
+  z;
   const { name, house_id } = req.body;
 
   if (!name || !house_id) {
